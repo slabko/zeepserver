@@ -14,6 +14,7 @@ binding = client.wsdl.bindings[APPLICATION]
 app = Flask('person_api')
 
 # Types from WSDL
+# we still need to type this, but Zeep makes sure that types comply with the WSDL
 Person = client.get_type('ns0:Person')
 SSN = client.get_type('ns0:SSN')
 
