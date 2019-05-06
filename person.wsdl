@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:plink="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+                  xmlns:senc="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:senv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:soap12enc="http://www.w3.org/2003/05/soap-encoding/"
+                  xmlns:soap12env="http://www.w3.org/2003/05/soap-envelope/" xmlns:tns="spyne.examples.hello.http"
+                  xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xop="http://www.w3.org/2004/08/xop/include"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  targetNamespace="spyne.examples.hello.http" name="Application">
+    <wsdl:types>
+        <xs:schema targetNamespace="spyne.examples.hello.http" elementFormDefault="qualified">
+            <xs:complexType name="Person">
+                <xs:sequence>
+                    <xs:element name="username" type="xs:string" minOccurs="0" nillable="true"/>
+                    <xs:element name="email" type="xs:string" minOccurs="0" nillable="true"/>
+                    <xs:element name="first_name" type="xs:string" minOccurs="0" nillable="true"/>
+                    <xs:element name="last_name" type="xs:string" minOccurs="0" nillable="true"/>
+                    <xs:element name="address" type="xs:string" minOccurs="0" nillable="true"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="PersonKey">
+                <xs:sequence>
+                    <xs:element name="username" type="xs:string" minOccurs="0" nillable="true"/>
+                    <xs:element name="email" type="xs:string" minOccurs="0" nillable="true"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SSN">
+                <xs:sequence>
+                    <xs:element name="username" type="xs:string" minOccurs="0" nillable="true"/>
+                    <xs:element name="ssn" type="xs:string" minOccurs="0" nillable="true"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="get_person">
+                <xs:sequence>
+                    <xs:element name="key" type="tns:PersonKey" minOccurs="0" nillable="true"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="get_personResponse">
+                <xs:sequence>
+                    <xs:element name="get_personResult" type="tns:Person" minOccurs="0" nillable="true"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="get_ssn">
+                <xs:sequence>
+                    <xs:element name="key" type="tns:PersonKey" minOccurs="0" nillable="true"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="get_ssnResponse">
+                <xs:sequence>
+                    <xs:element name="get_ssnResult" type="tns:SSN" minOccurs="0" nillable="true"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="Person" type="tns:Person"/>
+            <xs:element name="PersonKey" type="tns:PersonKey"/>
+            <xs:element name="SSN" type="tns:SSN"/>
+            <xs:element name="get_person" type="tns:get_person"/>
+            <xs:element name="get_personResponse" type="tns:get_personResponse"/>
+            <xs:element name="get_ssn" type="tns:get_ssn"/>
+            <xs:element name="get_ssnResponse" type="tns:get_ssnResponse"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="get_person">
+        <wsdl:part name="get_person" element="tns:get_person"/>
+    </wsdl:message>
+    <wsdl:message name="get_personResponse">
+        <wsdl:part name="get_personResponse" element="tns:get_personResponse"/>
+    </wsdl:message>
+    <wsdl:message name="get_ssn">
+        <wsdl:part name="get_ssn" element="tns:get_ssn"/>
+    </wsdl:message>
+    <wsdl:message name="get_ssnResponse">
+        <wsdl:part name="get_ssnResponse" element="tns:get_ssnResponse"/>
+    </wsdl:message>
+    <wsdl:service name="PersonService">
+        <wsdl:port name="Application" binding="tns:Application">
+            <soap:address location="http://localhost:5000/"/>
+        </wsdl:port>
+    </wsdl:service>
+    <wsdl:portType name="Application">
+        <wsdl:operation name="get_person" parameterOrder="get_person">
+            <wsdl:input name="get_person" message="tns:get_person"/>
+            <wsdl:output name="get_personResponse" message="tns:get_personResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="get_ssn" parameterOrder="get_ssn">
+            <wsdl:input name="get_ssn" message="tns:get_ssn"/>
+            <wsdl:output name="get_ssnResponse" message="tns:get_ssnResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="Application" type="tns:Application">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="get_person">
+            <soap:operation soapAction="get_person" style="document"/>
+            <wsdl:input name="get_person">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="get_personResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="get_ssn">
+            <soap:operation soapAction="get_ssn" style="document"/>
+            <wsdl:input name="get_ssn">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="get_ssnResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+</wsdl:definitions>
