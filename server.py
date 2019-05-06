@@ -13,20 +13,30 @@ binding = client.wsdl.bindings[APPLICATION]
 
 app = Flask('person_api')
 
-
+# Types from WSDL
 Person = client.get_type('ns0:Person')
 SSN = client.get_type('ns0:SSN')
 
 
-@app.errorhandler(Exception)
-def handle_server_error(error):
-    # Needs to return proper errors
-    response = make_response('<error>SOAP Error</error>')
-    response.mimetype = 'text/xml'
-    response.status_code = 500
-    return response
+# Actual implementation of endpoints (return random values)
+def get_person(key):
+    return Person(
+        username=key.username,
+        email=key.email,
+        first_name=fake.first_name(),
+        last_name=fake.last_name(),
+        address=fake.address()
+    )
 
 
+def get_ssn(key):
+    return SSN(
+        username=key.username,
+        ssn=fake.ssn()
+    )
+
+
+# Actual SOAP endpoint
 @app.route('/', methods=['POST', 'GET'])
 def soap_endpoint():
 
@@ -53,21 +63,14 @@ def soap_endpoint():
     return Response(etree_to_string(to_return.content), mimetype='text/xml')
 
 
-def get_person(key):
-    return Person(
-        username=key.username,
-        email=key.email,
-        first_name=fake.first_name(),
-        last_name=fake.last_name(),
-        address=fake.address()
-    )
+@app.errorhandler(Exception)
+def handle_server_error(error):
+    # Needs to return proper errors
+    response = make_response('<error>SOAP Error</error>')
+    response.mimetype = 'text/xml'
+    response.status_code = 500
+    return response
 
-
-def get_ssn(key):
-    return SSN(
-        username=key.username,
-        ssn=fake.ssn()
-    )
 
 if __name__ == '__main__':
     app.run()
